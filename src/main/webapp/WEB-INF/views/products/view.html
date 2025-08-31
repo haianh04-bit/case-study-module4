@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Chi tiết sản phẩm - Sport Shop</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Ảnh sản phẩm -->
+            <div class="col-md-5">
+                <img th:src="@{/resources/uploads/{url}(url=${product.imageUrl})}"
+                     class="img-fluid rounded shadow-sm"
+                     alt="Ảnh sản phẩm"/>
+            </div>
+
+            <!-- Thông tin sản phẩm -->
+            <div class="col-md-7">
+                <h2 th:text="${product.name}"></h2>
+                <p class="text-muted">
+                    Danh mục:
+                    <span th:text="${product.categoryName != null ? product.categoryName : 'Chưa có'}"></span>
+                </p>
+                <h4 class="text-danger fw-bold"
+                    th:text="${#numbers.formatDecimal(product.price,0,'POINT',2,'COMMA')} + ' ₫'">
+
+                </h4>
+                <p class="mt-3" th:text="${product.description}"></p>
+
+                <div class="mt-4">
+                    <!-- Nút mua ngay (USER) -->
+                    <a class="btn btn-danger btn-lg me-2"
+                       href="#"
+                       sec:authorize="hasRole('USER')">
+                        <i class="bi bi-cart-plus-fill"></i> Mua ngay
+                    </a>
+
+                    <!-- Nút sửa & xóa (ADMIN) -->
+                    <a class="btn btn-warning btn-lg me-2"
+                       th:href="@{/products/{id}/edit(id=${product.id})}"
+                       sec:authorize="hasRole('ADMIN')">
+                        <i class="bi bi-pencil-square"></i> Sửa
+                    </a>
+                    <a class="btn btn-outline-danger btn-lg"
+                       th:href="@{/products/{id}/delete(id=${product.id})}"
+                       sec:authorize="hasRole('ADMIN')"
+                       onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')">
+                        <i class="bi bi-trash"></i> Xóa
+                    </a>
+                </div>
+
+                <!-- Quay lại danh sách -->
+                <div class="mt-4">
+                    <a class="btn btn-secondary" th:href="@{/products}">
+                        <i class="bi bi-arrow-left"></i> Quay lại danh sách
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

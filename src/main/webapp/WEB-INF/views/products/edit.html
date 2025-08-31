@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"> lang="vi">
+<head>
+    <title>Edit Product</title>
+    <!-- Bootstrap 5 CDN -->
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card">
+        <div class="card-header">
+            Edit product
+        </div>
+        <div class="card-body">
+            <form th:object="${product}" class="form" th:action="@{/products/{id}/edit(id=${productId})}" method="post" enctype="multipart/form-data">
+                <!-- Tên sản phẩm -->
+                <div class="mb-3">
+                    <label for="name" class="form-label">Product name</label>
+                    <input type="text"
+                           th:field="*{name}"
+                           th:class="${#fields.hasErrors('name') ? 'form-control is-invalid' : 'form-control'}"
+                           id="name" required>
+                    <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback">
+                        <span th:errors="*{name}"></span>
+                    </div>
+                </div>
+
+                <!-- Giá -->
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="number" step="0.01"
+                           th:field="*{price}"
+                           th:class="${#fields.hasErrors('price') ? 'form-control is-invalid' : 'form-control'}"
+                           id="price" required>
+                    <div th:if="${#fields.hasErrors('price')}" class="invalid-feedback">
+                        <span th:errors="*{price}"></span>
+                    </div>
+                </div>
+
+                <!-- Mô tả -->
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea th:field="*{description}"
+                              th:class="${#fields.hasErrors('description') ? 'form-control is-invalid' : 'form-control'}"
+                              id="description"></textarea>
+                    <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback">
+                        <span th:errors="*{description}"></span>
+                    </div>
+                </div>
+
+                <!-- Ảnh -->
+                <div class="mb-3">
+                    <label for="image" class="form-label">Image</label>
+                    <input type="file" th:field="*{image}" class="form-control" id="image">
+                    <div class="mt-2">
+                        <img th:if="${productImage != null}"
+                             th:src="@{/resources/uploads/{url}(url=${productImage})}"
+                             alt="current image"
+                             width="120"  class="rounded">
+                    </div>
+                </div>
+
+                <!-- Danh mục -->
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select th:field="*{categoryId}" class="form-select" id="category">
+                        <option value="" selected>Choose a category</option>
+                        <option th:each="cat : ${categories}"
+                                th:value="${cat.id}"
+                                th:text="${cat.name}">
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+                <a th:href="@{/products}" class="btn btn-secondary">Back to list</a>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

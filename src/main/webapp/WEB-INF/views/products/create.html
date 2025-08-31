@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm sản phẩm mới</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container mt-4">
+
+        <h2 class="mb-4">➕ Thêm sản phẩm mới</h2>
+
+        <!-- Form thêm sản phẩm -->
+        <form th:action="@{/products/create}" th:object="${product}" method="post"
+              enctype="multipart/form-data">
+
+            <div class="mb-3">
+                <label class="form-label">Tên sản phẩm</label>
+                <input type="text" th:field="*{name}" class="form-control" placeholder="Nhập tên sản phẩm" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Mô tả</label>
+                <textarea th:field="*{description}" class="form-control" rows="3" placeholder="Mô tả sản phẩm"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Giá</label>
+                <input type="number" th:field="*{price}" class="form-control" placeholder="Nhập giá" step="0.01" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Danh mục</label>
+                <select th:field="*{categoryId}" class="form-select">
+                    <option value="">-- Chọn danh mục --</option>
+                    <option th:each="cat : ${categories}"
+                            th:value="${cat.id}"
+                            th:text="${cat.name}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Ảnh sản phẩm</label>
+                <input type="file" th:field="*{image}" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-success">💾 Lưu</button>
+            <a th:href="@{/products}" class="btn btn-secondary">↩️ Quay lại</a>
+        </form>
+
+    </div>
+</section>
+</body>
+</html>
