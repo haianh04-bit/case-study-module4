@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,21 +39,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                // public routes
-                .antMatchers("/", "/home", "/login", "/register", "/resources/**", "/css/**", "/js/**").permitAll()
-                // role-based routes
+        http
+                .authorizeRequests()
+                .antMatchers("/", "/home", "/login", "/register","/verify-otp", "/resources/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/cart/**", "/order/**").hasRole("USER")
-                // others require login
+                .antMatchers("/cart/**", "/order/**", "/user/**").hasRole("USER")
                 .anyRequest().authenticated()
 
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .usernameParameter("email")   // ⚡ login bằng email
+                .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/home", true)
                 .permitAll()
@@ -59,11 +65,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
+                .deleteCookies("JSESSIONID") // xóa cookie khi logout
                 .logoutSuccessUrl("/home")
                 .permitAll()
 
                 .and()
+                .sessionManagement()
+                .maximumSessions(1)   // mỗi user chỉ cho login 1 session
+                .maxSessionsPreventsLogin(false) // false = login mới sẽ kick session cũ
+                .expiredUrl("/login?expired")    // nếu session hết hạn
+                .sessionRegistry(sessionRegistry())
+
+                .and().and()
+                .rememberMe() // bật cookie remember-me
+                .key("uniqueAndSecret") // key để mã hóa cookie
+                .tokenValiditySeconds(7 * 24 * 60 * 60) // cookie sống 7 ngày
+                .userDetailsService(userDetailsService)
+
+                .and()
                 .csrf().disable();
     }
-
 }

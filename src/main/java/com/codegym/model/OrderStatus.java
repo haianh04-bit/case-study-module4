@@ -1,7 +1,9 @@
 package com.codegym.model;
 
 public enum OrderStatus {
-    PENDING,   // Chờ xử lý
-    SHIPPING,  // Đang giao
-    COMPLETED  // Hoàn tất
+    PENDING,      // chờ xử lý
+    PROCESSING,   // đang xử lý
+    SHIPPED,      // đã giao cho đơn vị vận chuyển
+    DELIVERED,    // đã giao thành công
+    CANCELED      // đã hủy
 }

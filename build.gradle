@@ -66,6 +66,10 @@ dependencies {
     // Testing
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+
+    implementation 'org.springframework:spring-context-support:5.3.32'
+    implementation 'com.sun.mail:jakarta.mail:1.6.7'
+
 }
 
 test {

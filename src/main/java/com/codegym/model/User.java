@@ -28,15 +28,16 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     private String phone;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String address;
 
     @Column(name  = "image_url")
     private String imageUrl;
-    private boolean enabled = true;
+
+    private boolean enabled = false;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -64,6 +65,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

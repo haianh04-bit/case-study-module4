@@ -14,7 +14,7 @@
         <div class="row">
             <!-- Ảnh sản phẩm -->
             <div class="col-md-5">
-                <img th:src="@{/resources/uploads/{url}(url=${product.imageUrl})}"
+                <img th:src="@{/resources/uploads/product/{url}(url=${product.imageUrl})}"
                      class="img-fluid rounded shadow-sm"
                      alt="Ảnh sản phẩm"/>
             </div>
@@ -39,7 +39,15 @@
                        sec:authorize="hasRole('USER')">
                         <i class="bi bi-cart-plus-fill"></i> Mua ngay
                     </a>
-
+                    <!-- Form thêm vào giỏ hàng (USER) -->
+                    <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post" class="mt-3"
+                          sec:authorize="hasRole('USER')">
+                        <label for="quantity" class="form-label">Số lượng</label>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" class="form-control w-25 mb-3"/>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
+                        </button>
+                    </form>
                     <!-- Nút sửa & xóa (ADMIN) -->
                     <a class="btn btn-warning btn-lg me-2"
                        th:href="@{/products/{id}/edit(id=${product.id})}"

@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
-    private final String UPLOAD_DIR = "D:/module4/case-study/uploads/";
+    private final String UPLOAD_DIR = "D:/module4/case-study/uploads/product/";
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -46,6 +46,10 @@ public class ProductService {
 
     public Optional<Product> findById(Long id) {
         return productRepository.findById(id);
+    }
+
+    public Product findCartId(Long id) {
+        return productRepository.findById(id).orElse(null);
     }
 
     public Optional<ProductDTO> findByIdDB(Long id) {
@@ -108,6 +112,5 @@ public class ProductService {
         }
         productRepository.save(product);
     }
-
 
 }

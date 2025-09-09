@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Danh sách đơn hàng</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">📋 Danh sách đơn hàng</h4>
+            <a th:href="@{/products}" class="btn btn-success btn-sm">
+                <i class="bi bi-bag"></i> Tiếp tục mua sắm
+            </a>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Mã đơn</th>
+                    <th>Ngày đặt</th>
+                    <th>Trạng thái</th>
+                    <th>Tổng tiền</th>
+                    <th class="text-center">Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order, iterStat : ${orders}">
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${order.id}"></td>
+                    <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${order.status}"></td>
+                    <td th:text="${order.totalPrice}"></td>
+                    <td class="text-center">
+                        <a th:href="@{/orders/{id}(id=${order.id})}"
+                           class="btn btn-sm btn-primary">
+                            <i class="bi bi-eye"></i> Xem
+                        </a>
+
+                        <!-- Nếu ADMIN thì được phép thay đổi trạng thái -->
+                        <a sec:authorize="hasRole('ADMIN')"
+                           th:href="@{/orders/{id}/update-status(id=${order.id})}"
+                           class="btn btn-sm btn-warning">
+                            <i class="bi bi-pencil-square"></i> Cập nhật
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>

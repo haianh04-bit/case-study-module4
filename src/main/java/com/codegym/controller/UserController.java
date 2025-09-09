@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -20,22 +23,30 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Xem profile
+    // 🔹 Trang profile cá nhân
     @GetMapping("/profile")
-    public String profile(Authentication authentication, Model model) {
+    public String profile(HttpSession session, Authentication authentication, Model model) {
         String email = authentication.getName();
         User user = userService.findByEmail(email);
         if (user == null) return "redirect:/login";
 
         UserDTO dto = new UserDTO(
-                user.getId(), user.getUsername(), user.getEmail(),
-                user.getPhone(), user.getAddress(), user.getImageUrl()
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getAddress(),
+                user.getImageUrl()
         );
+
+        // Lưu user vào session
+        session.setAttribute("currentUser", user);
+
         model.addAttribute("user", dto);
-        return "users/profile";
+        return "users/profile"; // => users/profile.html
     }
 
-    // Form update profile
+    // 🔹 Form chỉnh sửa thông tin cá nhân
     @GetMapping("/edit")
     public String editForm(Authentication authentication, Model model) {
         String email = authentication.getName();
@@ -43,41 +54,34 @@ public class UserController {
         if (user == null) return "redirect:/login";
 
         UserDTO dto = new UserDTO(
-                user.getId(), user.getUsername(), user.getEmail(),
-                user.getPhone(), user.getAddress(), user.getImageUrl()
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getAddress(),
+                user.getImageUrl()
         );
-        model.addAttribute("users", dto);
-        return "users/edit";
+        model.addAttribute("user", dto);
+        return "users/edit"; // => users/edit.html
     }
 
-    // Lưu update
+    // 🔹 Submit chỉnh sửa profile
     @PostMapping("/edit")
     public String updateProfile(Authentication authentication,
-                                @ModelAttribute("user") UserDTO dto,
-                                @RequestParam("avatarFile") MultipartFile avatarFile) throws IOException {
+                                @Valid @ModelAttribute("user") UserDTO dto, BindingResult result,
+                                @RequestParam("avatarFile") MultipartFile avatarFile, HttpSession session,
+                                Model model) throws IOException {
+        if (result.hasErrors()) {
+            model.addAttribute("user", dto);
+            return "users/edit"; // Trả lại form kèm lỗi
+        }
         String email = authentication.getName();
         User user = userService.findByEmail(email);
         if (user == null) return "redirect:/login";
 
-        user.setUsername(dto.getUsername());
-        user.setPhone(dto.getPhone());
-        user.setAddress(dto.getAddress());
-
-        // upload avatar
-        if (!avatarFile.isEmpty()) {
-            String fileName = System.currentTimeMillis() + "_" + avatarFile.getOriginalFilename();
-            String uploadDir = "uploads/avatars/";
-            java.nio.file.Path uploadPath = java.nio.file.Paths.get(uploadDir);
-            if (!java.nio.file.Files.exists(uploadPath)) {
-                java.nio.file.Files.createDirectories(uploadPath);
-            }
-            java.nio.file.Path filePath = uploadPath.resolve(fileName);
-            avatarFile.transferTo(filePath.toFile());
-
-            user.setImageUrl("/" + uploadDir + fileName);
-        }
-
-        userService.save(user);
+        userService.updateUser(user.getId(), dto, avatarFile);
+        Optional<User> updatedUser = userService.findById(user.getId());
+        session.setAttribute("currentUser", updatedUser);
         return "redirect:/user/profile?success";
     }
 }

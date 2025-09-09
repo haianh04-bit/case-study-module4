@@ -36,7 +36,7 @@
         <div class="row g-4">
             <div class="col-md-4" th:each="product : ${products}">
                 <div class="card h-100 shadow-sm">
-                    <img class="card-img-top" th:src="@{/resources/uploads/{url}(url=${product.imageUrl})}"
+                    <img class="card-img-top" th:src="@{/resources/uploads/product/{url}(url=${product.imageUrl})}"
                          alt="Ảnh sản phẩm" style="height: 200px; object-fit: cover;"/>
 
                     <div class="card-body d-flex flex-column">
@@ -58,6 +58,15 @@
                                sec:authorize="hasRole('USER')">
                                 <i class="bi bi-cart-plus-fill"></i> Mua ngay
                             </a>
+
+                            <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post" class="d-inline"
+                                  sec:authorize="hasRole('USER')">
+                                <input type="hidden" name="quantity" value="1"/>
+                                <button type="submit" class="btn btn-success btn-sm">
+                                    <i class="bi bi-cart-plus"></i> Thêm vào giỏ
+                                </button>
+                            </form>
+
 
                             <!-- Chỉ ADMIN thấy -->
                             <a class="btn btn-warning btn-sm"

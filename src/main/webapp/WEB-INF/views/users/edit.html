@@ -10,30 +10,40 @@
     <div class="card shadow">
         <div class="card-header bg-dark text-white">✏️ Cập nhật thông tin</div>
         <div class="card-body">
-            <form th:object="${users}" th:action="@{/user/edit}" method="post" enctype="multipart/form-data">
+            <form th:object="${user}" th:action="@{/user/edit}" method="post" enctype="multipart/form-data">
                 <input type="hidden" th:field="*{id}"/>
 
                 <div class="mb-3">
                     <label>Username</label>
-                    <input type="text" th:field="*{username}" class="form-control"/>
+                    <input type="text" th:field="*{username}" th:class="${#fields.hasErrors('username') ? 'form-control is-invalid' : 'form-control'}" id="username" aria-describedby="usernameHelp" name="username" required>
+                    <div th:if="${#fields.hasErrors('username')}" class="invalid-feedback">
+                        <span th:errors="*{username}"></span>
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label>Phone</label>
-                    <input type="text" th:field="*{phone}" class="form-control"/>
+                    <input type="text" th:field="*{phone}" th:class="${#fields.hasErrors('phone') ? 'form-control is-invalid' : 'form-control'}" id="phone" aria-describedby="phoneHelp" name="phone" required>
+                    <div th:if="${#fields.hasErrors('phone')}" class="invalid-feedback">
+                        <span th:errors="*{phone}"></span>
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label>Address</label>
-                    <input type="text" th:field="*{address}" class="form-control"/>
+                    <input type="text" th:field="*{address}" th:class="${#fields.hasErrors('address') ? 'form-control is-invalid' : 'form-control'}" id="address" aria-describedby="addressHelp" name="address" required>
+                    <div th:if="${#fields.hasErrors('address')}" class="invalid-feedback">
+                        <span th:errors="*{address}"></span>
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label>Avatar</label>
-                    <input type="file" name="avatarFile" class="form-control"/>
-                    <img th:if="${users.imageUrl}" th:src="${users.imageUrl}" class="mt-2" width="100"/>
+                    <input type="file" th:field="*{imageUrl}" th:class="${#fields.hasErrors('image') ? 'form-control is-invalid' : 'form-control'}" id="image" aria-describedby="image" name="imageUrl" >
+                    <div th:if="${#fields.hasErrors('image')}" class="invalid-feedback">
+                        <span th:errors="*{imageUrl}"></span>
+                    </div>
                 </div>
-
                 <button type="submit" class="btn btn-success">Lưu</button>
                 <a th:href="@{/user/profile}" class="btn btn-secondary">Hủy</a>
             </form>
