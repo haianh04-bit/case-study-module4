@@ -4,6 +4,7 @@ import com.codegym.model.Role;
 import com.codegym.validations.custom.Image;
 import com.codegym.validations.custom.UniqueEmail;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -37,11 +38,19 @@ public class UserDTO {
     private String address;
 
     @Image
-    private String imageUrl; // để hiển thị
+    private MultipartFile imageUrl;
 
     private boolean enabled;
     private boolean accountNonLocked;
     private Role role;
+
+    public UserDTO(Long id, String username, String email, String phone, String address, MultipartFile imageUrl) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+    }
 
     public UserDTO(Long id, String username, String email, String phone, String address, String imageUrl) {
         this.id = id;
@@ -49,6 +58,6 @@ public class UserDTO {
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.imageUrl = imageUrl;
+        this.imageUrl = null;
     }
 }

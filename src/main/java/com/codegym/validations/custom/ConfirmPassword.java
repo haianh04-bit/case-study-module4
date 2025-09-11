@@ -5,13 +5,14 @@ import com.codegym.validations.PasswordMatchesValidator;
 import javax.validation.Constraint;
 import java.lang.annotation.*;
 
-@Target({ElementType.TYPE})
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PasswordMatchesValidator.class)
 public @interface ConfirmPassword {
-    String message() default "Mật khẩu xác nhận không khớp!";
+    String message() default "";
 
     Class<?>[] groups() default {};
 
     Class<? extends javax.validation.Payload>[] payload() default {};
+
 }

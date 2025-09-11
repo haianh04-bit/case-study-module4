@@ -23,7 +23,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // 🔹 Trang profile cá nhân
     @GetMapping("/profile")
     public String profile(HttpSession session, Authentication authentication, Model model) {
         String email = authentication.getName();
@@ -39,14 +38,11 @@ public class UserController {
                 user.getImageUrl()
         );
 
-        // Lưu user vào session
         session.setAttribute("currentUser", user);
-
         model.addAttribute("user", dto);
-        return "users/profile"; // => users/profile.html
+        return "users/profile";
     }
 
-    // 🔹 Form chỉnh sửa thông tin cá nhân
     @GetMapping("/edit")
     public String editForm(Authentication authentication, Model model) {
         String email = authentication.getName();
@@ -62,10 +58,9 @@ public class UserController {
                 user.getImageUrl()
         );
         model.addAttribute("user", dto);
-        return "users/edit"; // => users/edit.html
+        return "users/edit";
     }
 
-    // 🔹 Submit chỉnh sửa profile
     @PostMapping("/edit")
     public String updateProfile(Authentication authentication,
                                 @Valid @ModelAttribute("user") UserDTO dto, BindingResult result,
@@ -73,7 +68,7 @@ public class UserController {
                                 Model model) throws IOException {
         if (result.hasErrors()) {
             model.addAttribute("user", dto);
-            return "users/edit"; // Trả lại form kèm lỗi
+            return "users/edit";
         }
         String email = authentication.getName();
         User user = userService.findByEmail(email);

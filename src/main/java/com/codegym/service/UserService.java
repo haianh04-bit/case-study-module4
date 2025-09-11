@@ -17,25 +17,13 @@ import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
-    private final String UPLOAD_DIR = "D:/module4/case-study/uploads/user/";
+    private final String UPLOAD_DIR = "D:/module4/case-study/uploads/user";
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private FileUploadService fileUploadService;
-
-    // Mapping entity -> DTO
-    private UserDTO mapToDTO(User user) {
-        return new UserDTO(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getPhone(),
-                user.getAddress(),
-                user.getImageUrl()
-        );
-    }
 
     public List<User> findAll() {
         return (List<User>) userRepository.findAll();

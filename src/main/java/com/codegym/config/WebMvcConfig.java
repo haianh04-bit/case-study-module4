@@ -47,7 +47,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.setTemplateResolver(templateResolver());
-        engine.addDialect(new LayoutDialect()); // 👈 Bật LayoutDialect
+        engine.addDialect(new LayoutDialect());
         engine.addDialect(new SpringSecurityDialect());
         return engine;
     }

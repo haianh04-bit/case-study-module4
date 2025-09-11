@@ -4,7 +4,9 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" th:href="@{/}">🏋️ Sport Shop</a>
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="bi bi-basket-fill"></i> Sport Shop
+            </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -13,56 +15,81 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- Ai cũng thấy -->
-                    <li class="nav-item"><a class="nav-link" th:href="@{/products}">Products</a></li>
-
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/products}">
+                            <i class="bi bi-box-seam"></i> Products
+                        </a>
+                    </li>
                     <li class="nav-item" sec:authorize="hasRole('USER')">
-                        <a class="nav-link" th:href="@{/cart}">Cart 🛒</a>
+                        <a class="nav-link" th:href="@{/cart}">
+                            <i class="bi bi-cart"></i> Cart
+                        </a>
                     </li>
 
                     <!-- Chỉ ADMIN mới thấy -->
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                        <a class="nav-link" th:href="@{/categories}">Categories</a>
+                        <a class="nav-link" th:href="@{/categories}">
+                            <i class="bi bi-tags"></i> Categories
+                        </a>
                     </li>
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                        <a class="nav-link" th:href="@{/admin/users}">Users</a>
+                        <a class="nav-link" th:href="@{/admin/users}">
+                            <i class="bi bi-people"></i> Users
+                        </a>
                     </li>
-
                 </ul>
 
                 <ul class="navbar-nav">
                     <!-- Nếu user chưa đăng nhập -->
                     <li sec:authorize="isAnonymous()" class="nav-item">
-                        <a class="nav-link" th:href="@{/login}">Login</a>
+                        <a class="nav-link" th:href="@{/login}">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </a>
                     </li>
                     <li sec:authorize="isAnonymous()" class="nav-item">
-                        <a class="nav-link" th:href="@{/register}">Register</a>
+                        <a class="nav-link" th:href="@{/register}">
+                            <i class="bi bi-person-plus"></i> Register
+                        </a>
                     </li>
 
                     <!-- Nếu user đã đăng nhập -->
                     <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle"></i>
-                            <span sec:authentication="name"></span> <!-- session user email -->
+                            <span sec:authentication="name"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <!-- thêm link tới profile -->
-                            <li><a class="dropdown-item" th:href="@{/user/profile}">My Profile</a></li>
                             <li sec:authorize="hasRole('USER')">
-                                <a class="dropdown-item" th:href="@{/orders}">My Orders</a>
+                                <a class="dropdown-item" th:href="@{/user/profile}">
+                                    <i class="bi bi-person"></i> My Profile
+                                </a>
                             </li>
-
+                            <li sec:authorize="hasRole('USER')">
+                                <a class="dropdown-item" th:href="@{/orders}">
+                                    <i class="bi bi-bag-check"></i> My Orders
+                                </a>
+                            </li>
                             <li sec:authorize="hasRole('ADMIN')">
-                                <a class="dropdown-item" th:href="@{/admin}">Admin Dashboard</a>
+                                <a class="dropdown-item" th:href="@{/admin/dashboard}">
+                                    <i class="bi bi-speedometer2"></i> Admin Dashboard
+                                </a>
                             </li>
                             <li sec:authorize="hasRole('ADMIN')">
-                                <a class="dropdown-item" th:href="@{/admin/carts}">Manage Carts</a>
+                                <a class="dropdown-item" th:href="@{/admin/carts}">
+                                    <i class="bi bi-cart-check"></i> Manage Carts
+                                </a>
                             </li>
                             <li sec:authorize="hasRole('ADMIN')">
-                                <a class="dropdown-item" th:href="@{/admin/orders}">Manage Orders</a>
+                                <a class="dropdown-item" th:href="@{/admin/orders}">
+                                    <i class="bi bi-receipt"></i> Manage Orders
+                                </a>
                             </li>
-
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/logout}">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 </ul>

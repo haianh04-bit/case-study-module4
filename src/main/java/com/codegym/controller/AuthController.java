@@ -49,6 +49,7 @@ public class AuthController {
         if (result.hasErrors()) {
             return "auth/register";
         }
+
         otpService.createPendingUser(dto);
         model.addAttribute("email", dto.getEmail());
         model.addAttribute("message", "Mã OTP đã được gửi đến email của bạn!");

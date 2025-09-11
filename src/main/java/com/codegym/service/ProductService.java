@@ -62,12 +62,10 @@ public class ProductService {
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
         MultipartFile file = dto.getImage();
-        // xử lý file upload
         if (file != null && !file.isEmpty()) {
             String fileName = fileUploadService.uploadFile(UPLOAD_DIR, file);
             product.setImageUrl(fileName);
         }
-        // gán category
         if (dto.getCategoryId() != null) {
             Category category = categoryRepository.findById(dto.getCategoryId())
                     .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -97,11 +95,9 @@ public class ProductService {
 
         MultipartFile file = dto.getImage();
         if (file != null && !file.isEmpty()) {
-            // Xoá file cũ nếu có
             if (product.getImageUrl() != null) {
                 fileUploadService.deleteFile(UPLOAD_DIR + "/" + product.getImageUrl());
             }
-            // Upload file mới
             String fileName = fileUploadService.uploadFile(UPLOAD_DIR, file);
             product.setImageUrl(fileName);
         }

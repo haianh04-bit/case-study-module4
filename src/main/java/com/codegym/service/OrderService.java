@@ -41,7 +41,7 @@ public class OrderService {
             orderDetailRepository.save(detail);
         }
 
-        return order; // ✅ Trả về order đã lưu
+        return order;
     }
 
     public List<Order> findByUser(User user) {

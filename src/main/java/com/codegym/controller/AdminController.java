@@ -4,6 +4,7 @@ import com.codegym.model.CartItem;
 import com.codegym.model.Order;
 import com.codegym.model.OrderStatus;
 import com.codegym.service.AdminService;
+import com.codegym.service.DashboardService;
 import com.codegym.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,12 +17,15 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final AdminService adminService;
+    private final DashboardService dashboardService;
 
-    @Autowired
-    private AdminService adminService;
-
+    public AdminController(UserService userService, AdminService adminService, DashboardService dashboardService) {
+        this.userService = userService;
+        this.adminService = adminService;
+        this.dashboardService = dashboardService;
+    }
     // Danh sách user
     @GetMapping("/users")
     public String list(Model model) {
@@ -55,5 +59,13 @@ public class AdminController {
     public String updateOrderStatus(@PathVariable Long id, @RequestParam OrderStatus status) {
         adminService.updateOrderStatus(id, status);
         return "redirect:/admin/orders";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        model.addAttribute("totalUsers", dashboardService.getTotalUsers());
+        model.addAttribute("totalOrders", dashboardService.getTotalOrders());
+        model.addAttribute("totalProducts", dashboardService.getTotalProducts());
+        return "admin/dashboard";
     }
 }

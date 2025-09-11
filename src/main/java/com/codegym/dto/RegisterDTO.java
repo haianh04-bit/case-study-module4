@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ConfirmPassword
+@ConfirmPassword(message = "Mật khẩu và xác nhận mật khẩu không khớp")
 public class RegisterDTO {
 
     @NotBlank(message = "Username không được để trống")
